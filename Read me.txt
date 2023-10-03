@@ -1,0 +1,13 @@
+This is a simple crud application.
+
+Front-end used React.
+To start front end use (npm run dev)
+
+Back-end used NodeJs
+To start backend server use (npm run start)
+
+
+Pending work:
+Use YUP for form validation
+Now the token are static make it dynamic.
+Implement login, register and logout funcionality.
