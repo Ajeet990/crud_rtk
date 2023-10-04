@@ -51,28 +51,28 @@ const AddUser = () => {
     }
 
     return (
-        <div className='container bg-info'>
+        <div className='container bg-info my-1' align="center">
             <h1>Add new user to the crew.</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label className="form-label">Name</label>
-                    <input type="text" value={inputs.name || ''} onChange={handleChange} name="name" className="form-control" id="name" />
+                    <label className="form-label text-center">Name</label>
+                    <input type="text" value={inputs.name || ''} onChange={handleChange} name="name" className="form-control w-50" id="name" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">User Name</label>
-                    <input type="text" value={inputs.username || ''} onChange={handleChange} className="form-control" name='username' id="username" />
+                    <input type="text" value={inputs.username || ''} onChange={handleChange} className="form-control w-50" name='username' id="username" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Email</label>
-                    <input type="text" value={inputs.email || ''} onChange={handleChange} className="form-control" name='email' id="email" />
+                    <input type="text" value={inputs.email || ''} onChange={handleChange} className="form-control w-50" name='email' id="email" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Password</label>
-                    <input type="password" value={inputs.password || ''} onChange={handleChange} className="form-control" name='password' id="password" />
+                    <input type="password" value={inputs.password || ''} onChange={handleChange} className="form-control w-50" name='password' id="password" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Address</label>
-                    <input type="text" value={inputs.address || ''} onChange={handleChange} className="form-control" name='address' id="address" />
+                    <input type="text" value={inputs.address || ''} onChange={handleChange} className="form-control w-50" name='address' id="address" />
                 </div>
                 
                 <input type="submit" className="btn btn-primary my-2" value={"Add user"}/>

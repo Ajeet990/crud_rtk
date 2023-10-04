@@ -22,7 +22,7 @@ const Home = () => {
     if (userResponse.isLoading) return <div>Please Wait Data Loading...</div>
 
     return (
-        <div>
+        <div className='container'>
             <h1>Welcome to my Crud Application</h1>
             <Link to="addUser" className='btn btn-primary'>Add User</Link>
             {
