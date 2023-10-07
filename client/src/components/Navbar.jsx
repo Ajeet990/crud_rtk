@@ -1,7 +1,17 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../Authorization/Auth'
+
 
 const Navbar = () => {
+    const auth = useAuth()
+    const userEmail = auth.user
+    const navigate = useNavigate()
+    const handleLogOut = () => {
+        auth.logout()
+        localStorage.removeItem('user_token')
+        navigate('/login')
+    }
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -29,14 +39,20 @@ const Navbar = () => {
                                     <li><a className="dropdown-item" href="#">Something else here</a></li>
                                 </ul>
                             </li>
-                            <li className='nav-item'>
-                                <NavLink className="nav-link" to={'/login'}>Log-In</NavLink>
-                            </li>
-                            
+                            {
+                                userEmail ? (<li className='nav-item'>
+                                    <NavLink className="nav-link" onClick={handleLogOut}>Log-Out</NavLink>
+                                </li>) : (
+                                    <li className='nav-item'>
+                                        <NavLink className="nav-link" to={'/login'}>Log-In</NavLink>
+                                    </li>
+                                )
+                            }
+
                         </ul>
                         <form className="d-flex">
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                                <button className="btn btn-outline-success" type="submit">Search</button>
+                            <button className="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </div>
                 </div>
