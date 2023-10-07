@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import { findUserByEmail, registerModel, checkUserName } from "../models/authModel.js";
 
 export const login = (req, res) => {
-    const useremail = req.body.email
-    const password = req.body.password
+    const useremail = req.body.user_email
+    const password = req.body.user_password
     // console.log(useremail)
     findUserByEmail(useremail, (err, data) => {
         // console.log(data)
@@ -23,14 +23,14 @@ export const login = (req, res) => {
                         }
                 })
             } else {
-                return res.status(400).json({
+                return res.status(200).json({
                     success:false,
                     message:"Wrong Password.",
                     data:[]
                 })
             }
         } else {
-            return res.status(400).json({
+            return res.status(200).json({
                 success:false,
                 message:"User not registered",
                 data:[]

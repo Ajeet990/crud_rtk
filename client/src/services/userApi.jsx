@@ -70,10 +70,27 @@ export const userApi = createApi({
         }
       }),
       invalidatesTags:['userList']
+    }),
+    loginUser:builder.mutation({
+      query:(userDetail) => ({
+        url:'auth/login',
+        method:"POST",
+        body: {
+          user_email:userDetail.userEmail,
+          user_password:userDetail.userPassword
+        }
+      })
     })
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllUserListQuery, useAddUserMutation, useDeleteUserMutation, useFindUserByIdQuery, useUpdateUserMutation } = userApi
+export const {
+  useGetAllUserListQuery,
+  useAddUserMutation,
+  useDeleteUserMutation,
+  useFindUserByIdQuery,
+  useUpdateUserMutation,
+  useLoginUserMutation
+} = userApi
