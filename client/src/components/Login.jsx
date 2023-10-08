@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from '../Authorization/Auth'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useLoginUserMutation } from '../services/userApi'
 
@@ -41,6 +41,7 @@ const Login = () => {
                     <input type="password" name='user_pass' onChange={(e)=>{setUserPass(e.target.value)}} className="form-control" id="exampleInputPassword1" />
                 </div>
                 <button type="submit" className="btn btn-primary">Log In</button>
+                <NavLink to={'/addUser'} className="btn btn-primary mx-1">Sign Up</NavLink>
             </form>
         </div>
     )
