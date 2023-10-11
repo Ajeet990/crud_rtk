@@ -19,20 +19,21 @@ app.use(cors(corsOptions));
 // app.use(cors())
 
 // // we can put storage code into seprate file(optional)
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, '../client/public/upload/userProfiles')
-//   },
-//   filename: function (req, file, cb) {
-//       cb(null, Date.now() + file.originalname)
-//   }
-// })
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../client/public/upload/userProfiles')
+  },
+  filename: function (req, file, cb) {
+      cb(null, Date.now() + file.originalname)
+  }
+})
 
-// const upload = multer({ storage: storage })
-// app.post('/api/upload', upload.single('file'), (req, res) => {
-//   const file = req.file
-//   return res.status(200).json(file.filename)
-// })
+const upload = multer({ storage: storage })
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  const file = req.file
+  // console.log("body",req.body)
+  return res.status(200).json(file.filename)
+})
 
 app.use('/api/users',verifyToken, userRouter)
 app.use('/api/auth', authRouter)

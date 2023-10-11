@@ -46,7 +46,8 @@ export const register = (req, res) => {
         user_name : req.body.user_name,
         email : req.body.email,
         password : req.body.password,
-        address : req.body.address
+        address : req.body.address,
+        profile_pic: req.body.profile_pic
     }
     // console.log(userDetail)
     findUserByEmail(req.body.email, (err, emailData) => {

@@ -18,13 +18,14 @@ export const checkUserName = (userName, result) => {
 }
 
 export const registerModel = (userDetail, result) => {
-    const q = "INSERT INTO users (name, user_name, email, password, address, updated_date) values (?)"
+    const q = "INSERT INTO users (name, user_name, email, password, address, profile_pic, updated_date) values (?)"
     const vals = [
         userDetail.name,
         userDetail.user_name,
         userDetail.email,
         userDetail.password,
         userDetail.address,
+        userDetail.profile_pic,
         '0000-00-00 00:00:00'
     ]
     // console.log(vals)

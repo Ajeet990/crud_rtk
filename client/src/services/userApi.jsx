@@ -27,7 +27,8 @@ export const userApi = createApi({
           user_name: userDetail.username,
           email: userDetail.email,
           password: userDetail.password,
-          address: userDetail.address
+          address: userDetail.address,
+          profile_pic:userDetail.profile_pic
         }
       }),
       invalidatesTags: ['userList']
@@ -81,6 +82,19 @@ export const userApi = createApi({
           user_password: userDetail.userPassword
         }
       })
+    }),
+    uploadImage: builder.mutation({
+      query: (file) => {
+        // console.log("rtk", file)
+        const body = new FormData();
+        body.append('Content-Type', file.type);
+        body.append('file', file);
+        return {
+          url: "upload",
+          method: "POST",
+          body
+        }
+      }
     })
   }),
 })
@@ -93,5 +107,6 @@ export const {
   useDeleteUserMutation,
   useFindUserByIdQuery,
   useUpdateUserMutation,
-  useLoginUserMutation
+  useLoginUserMutation,
+  useUploadImageMutation
 } = userApi

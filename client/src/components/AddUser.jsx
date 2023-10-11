@@ -1,52 +1,39 @@
-import {useEffect, useState} from 'react'
-import { useAddUserMutation } from '../services/userApi'
+import { useEffect, useState } from 'react'
+import { useAddUserMutation, useUploadImageMutation } from '../services/userApi'
 import { useNavigate } from 'react-router-dom'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
 const AddUser = () => {
-    const [editMode, setEditMode] = useState(false)
+    // const [editMode, setEditMode] = useState(false)
+    const [profile, setProfile] = useState('')
     const [addUser] = useAddUserMutation()
+    const [upload] = useUploadImageMutation()
     const navigate = useNavigate()
-    const {id} = useParams()
+    const { id } = useParams()
     const [inputs, setInputs] = useState({})
-
-    useEffect(() => {
-        if(id) {
-            setEditMode(true)
-        } else {
-            setEditMode(false)
-        }
-    }, [id])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (!inputs.name || !inputs.username || !inputs.email || !inputs.password || !inputs.address) {
+        if (!inputs.name || !inputs.username || !inputs.email || !inputs.password || !inputs.address || !profile) {
             toast.warning("All fields are required.")
         } else {
-            if(editMode) {
-
-            } else {
-
+            const photoUploadRst = await upload(profile)
+            if (photoUploadRst.data) {
+                inputs.profile_pic = photoUploadRst.data
                 const registerRst = await addUser(inputs)
-                // console.log(registerRst)
-                if(registerRst.data.success) {
+                if (registerRst.data.success) {
                     toast.success("User registered successfully.")
                     navigate("/")
                 } else {
                     toast.error(registerRst.data.message)
                 }
+
             }
         }
     }
-
-    // function handleSubmit(e) {
-    //     e.preventDefault()
-    //     console.log(inputs)
-    //         useAddUserMutation(inputs)
-    // }
     const handleChange = (e) => {
-        setInputs({...inputs, [e.target.name]:e.target.value })
+        setInputs({ ...inputs, [e.target.name]: e.target.value })
         // console.log(inputs)
     }
 
@@ -74,8 +61,12 @@ const AddUser = () => {
                     <label className="form-label">Address</label>
                     <input type="text" value={inputs.address || ''} onChange={handleChange} className="form-control" name='address' id="address" />
                 </div>
-                
-                <input type="submit" className="btn btn-primary my-2" value={"Add user"}/>
+                <div className="mb-3">
+                    <label className="form-label">Profile image</label>
+                    <input type="file" onChange={(e) => setProfile(e.target.files[0])} className="form-control" name='file' id="profile" />
+                </div>
+
+                <input type="submit" className="btn btn-primary my-2" value={"Add user"} />
             </form>
         </div>
     )
