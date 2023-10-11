@@ -12,6 +12,7 @@ const Navbar = () => {
         localStorage.removeItem('user_token')
         navigate('/login')
     }
+    // console.log("this", auth)
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,9 +26,9 @@ const Navbar = () => {
                             <li className="nav-item">
                                 <NavLink className="nav-link active" to={'/home'} aria-current="page">Home</NavLink>
                             </li>
-                            
+
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Dropdown
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -47,11 +48,32 @@ const Navbar = () => {
                                 )
                             }
 
+                            {
+                                auth.user && (
+                                    <li className="nav-item"><span className='text-light nav-link'>
+                                        Welcome : {auth.user.username}
+                                    </span></li>
+                                )
+                            }
+
                         </ul>
                         <form className="d-flex">
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                             <button className="btn btn-outline-success" type="submit">Search</button>
                         </form>
+                        {
+                            auth.user && (
+                                <div className="dropdown ms-1">
+                                    <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {auth.user.username}
+                                    </button>
+                                    <ul className="dropdown-menu">
+                                        <li><NavLink className="dropdown-item" to={'/'}>Profile</NavLink></li>
+                                    </ul>
+                                </div>
+                            )
+                        }
+
                     </div>
                 </div>
             </nav>

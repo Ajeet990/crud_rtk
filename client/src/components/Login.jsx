@@ -19,8 +19,9 @@ const Login = () => {
             toast.warning("All fields are required.")
         } else {
             const loginRst = await makeUserLogin({userEmail:userEmail, userPassword:userPass})
+            // console.log(loginRst.data.data.username)
             if (loginRst.data.success) {
-                auth.login(userEmail)
+                auth.login({userEmail:loginRst.data.data.email, username:loginRst.data.data.username})
                 localStorage.setItem("user_token",loginRst.data.data.token)
                 navigate(redirectPath, {replace:true})
             } else {
