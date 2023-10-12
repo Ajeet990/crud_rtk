@@ -39,13 +39,9 @@ const Navbar = () => {
                                 </ul>
                             </li>
                             {
-                                userEmail ? (<li className='nav-item'>
-                                    <NavLink className="nav-link" onClick={handleLogOut}>Log-Out</NavLink>
-                                </li>) : (
-                                    <li className='nav-item'>
-                                        <NavLink className="nav-link" to={'/login'}>Log-In</NavLink>
-                                    </li>
-                                )
+                                !userEmail && (<li className='nav-item'>
+                                <NavLink className="nav-link" to={'/login'}>Log-In</NavLink>
+                            </li>)
                             }
 
                             {
@@ -68,7 +64,12 @@ const Navbar = () => {
                                         {auth.user.username}
                                     </button>
                                     <ul className="dropdown-menu">
-                                        <li><NavLink className="dropdown-item" to={'/'}>Profile</NavLink></li>
+                                        <li>
+                                            <NavLink className="dropdown-item" to={`view/${auth.user.userId}`}>Profile</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink className="dropdown-item" onClick={handleLogOut}>Log-Out</NavLink>
+                                        </li>
                                     </ul>
                                 </div>
                             )
