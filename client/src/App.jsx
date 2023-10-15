@@ -13,6 +13,7 @@ import Home from './components/Home'
 import { RequireAuth } from './Authorization/RequireAuth'
 import { AuthProvider } from './Authorization/Auth'
 import PageNotFound from './components/PageNotFound'
+import SendMail from './SendMailSystem/SendMail'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -29,6 +30,7 @@ function App() {
           <Route path='/home' element={<RequireAuth><Home/></RequireAuth>} />
           <Route path='/update/:id' element={<Update />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/sendMail' element={<SendMail />} />
           <Route path='/*' element={<PageNotFound />} />
         </Routes>
       </AuthProvider>

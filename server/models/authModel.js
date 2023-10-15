@@ -18,7 +18,7 @@ export const checkUserName = (userName, result) => {
 }
 
 export const registerModel = (userDetail, result) => {
-    const q = "INSERT INTO users (name, user_name, email, password, address, profile_pic, updated_date) values (?)"
+    const q = "INSERT INTO users (name, user_name, email, password, address, profile_pic, user_verified, updated_date) values (?)"
     const vals = [
         userDetail.name,
         userDetail.user_name,
@@ -26,6 +26,7 @@ export const registerModel = (userDetail, result) => {
         userDetail.password,
         userDetail.address,
         userDetail.profile_pic,
+        userDetail.user_verified,
         '0000-00-00 00:00:00'
     ]
     // console.log(vals)
@@ -33,5 +34,22 @@ export const registerModel = (userDetail, result) => {
     db.query(q, [vals], (err, data) => {
         if (err) return result(err, null)
         return result(null, data)
+    })
+}
+
+export const validateOTPModel = (otpDetail, result) => {
+    const q = "select * from users where email = ? and user_verified = ?"
+    db.query(q, [otpDetail.email, otpDetail.otp], (err, data) => {
+        if (err) return result(err, null)
+        if (data.length > 0) {
+            const userVerified = 1
+            const qq = "UPDATE users set user_verified = ? where email = ?"
+            db.query(qq, [userVerified, otpDetail.email], (err, data) => {
+                if (err) return result(err, null)
+                return result(null, [{success:true}])
+            })
+        } else {
+            return result(null, [{success:false}])
+        }
     })
 }

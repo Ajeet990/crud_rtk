@@ -28,7 +28,8 @@ export const userApi = createApi({
           email: userDetail.email,
           password: userDetail.password,
           address: userDetail.address,
-          profile_pic:userDetail.profile_pic
+          profile_pic:userDetail.profile_pic,
+          otp:userDetail.otp
         }
       }),
       invalidatesTags: ['userList']
@@ -95,6 +96,26 @@ export const userApi = createApi({
           body
         }
       }
+    }),
+    sendOtpToMailAddress: builder.mutation({
+      query:(details) => ({
+        url:"auth/sendMail",
+        method: "POST",
+        body:{
+          email:details.email,
+          otp:details.otp
+        }
+      })
+    }),
+    validateOTP:builder.mutation({
+      query:(otp_email) => ({
+        url:"auth/validateOTP",
+        method:"POST",
+        body:{
+          otp:otp_email.otp,
+          email:otp_email.email
+        }
+      })
     })
   }),
 })
@@ -108,5 +129,7 @@ export const {
   useFindUserByIdQuery,
   useUpdateUserMutation,
   useLoginUserMutation,
-  useUploadImageMutation
+  useUploadImageMutation,
+  useSendOtpToMailAddressMutation,
+  useValidateOTPMutation
 } = userApi

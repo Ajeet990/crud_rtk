@@ -3,33 +3,43 @@ import { useAddUserMutation, useUploadImageMutation } from '../services/userApi'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
+import { useSendOtpToMailAddressMutation } from '../services/userApi'
+// import SendMail from '../SendMailSystem/SendMail'
 
 const AddUser = () => {
     // const [editMode, setEditMode] = useState(false)
     const [profile, setProfile] = useState('')
     const [addUser] = useAddUserMutation()
     const [upload] = useUploadImageMutation()
+    const [sendMailToNewUser] = useSendOtpToMailAddressMutation()
     const navigate = useNavigate()
     const { id } = useParams()
     const [inputs, setInputs] = useState({})
+    const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (!inputs.name || !inputs.username || !inputs.email || !inputs.password || !inputs.address || !profile) {
             toast.warning("All fields are required.")
         } else {
+            setLoading(true)
             const photoUploadRst = await upload(profile)
             if (photoUploadRst.data) {
+                const otp = Math.floor(100000 + Math.random() * 900000)
                 inputs.profile_pic = photoUploadRst.data
+                inputs.otp = otp
+                const data = { email: inputs.email, otp: otp }
+                const sendOtprst = await sendMailToNewUser(data)
                 const registerRst = await addUser(inputs)
-                if (registerRst.data.success) {
-                    toast.success("User registered successfully.")
-                    navigate("/")
-                } else {
-                    toast.error(registerRst.data.message)
-                }
 
+                if (registerRst.data.success && sendOtprst.data.success) {
+                    toast.success("OTP sent to registered email.")
+                    navigate("/sendMail", { state: data })
+                } else {
+                    toast.error(registerRst.data.message + ":" + sendOtprst.data.message)
+                }
             }
+
         }
     }
     const handleChange = (e) => {
@@ -67,6 +77,12 @@ const AddUser = () => {
                 </div>
 
                 <input type="submit" className="btn btn-primary my-2" value={"Add user"} />
+                {
+                    loading && (<><div className="spinner-border text-dark" role="status"></div>
+                        <span>Please wait. Sending mail... </span>
+                    </>)
+                }
+
             </form>
         </div>
     )
