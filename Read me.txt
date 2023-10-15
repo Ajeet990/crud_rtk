@@ -11,4 +11,4 @@ Pending work:
 Use YUP for form validation
 Now the token are static make it dynamic. done
 Implement login, register and logout funcionality. done
-image upload path:http://localhost:5173/upload/userProfiles/1696995709295user1.jpg
+image upload path:http://localhost:5173/upload/userProfiles/1696995709295user1.jpg done
