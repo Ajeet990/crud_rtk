@@ -5,6 +5,18 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import { useSendOtpToMailAddressMutation } from '../services/userApi'
 // import SendMail from '../SendMailSystem/SendMail'
+import { useFormik } from 'formik'
+import { addNewUserSchema } from '../schemas/AddUserSchema'
+
+
+const initialValues = {
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+    cpassword: "",
+    address: "",
+}
 
 const AddUser = () => {
     // const [editMode, setEditMode] = useState(false)
@@ -13,39 +25,38 @@ const AddUser = () => {
     const [upload] = useUploadImageMutation()
     const [sendMailToNewUser] = useSendOtpToMailAddressMutation()
     const navigate = useNavigate()
-    const { id } = useParams()
-    const [inputs, setInputs] = useState({})
     const [loading, setLoading] = useState(false)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (!inputs.name || !inputs.username || !inputs.email || !inputs.password || !inputs.address || !profile) {
-            toast.warning("All fields are required.")
-        } else {
-            setLoading(true)
-            const photoUploadRst = await upload(profile)
-            if (photoUploadRst.data) {
-                const otp = Math.floor(100000 + Math.random() * 900000)
-                inputs.profile_pic = photoUploadRst.data
-                inputs.otp = otp
-                const data = { email: inputs.email, otp: otp }
-                const sendOtprst = await sendMailToNewUser(data)
-                const registerRst = await addUser(inputs)
+    const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
+        initialValues: initialValues,
+        validationSchema: addNewUserSchema,
+        onSubmit: async (values) => {
+            if (!profile) {
+                toast.warning("Profile rquired.")
+            } else {
+                setLoading(true)
+                const photoUploadRst = await upload(profile)
+                if (photoUploadRst.data) {
+                    const otp = Math.floor(100000 + Math.random() * 900000)
+                    values.profile_pic = photoUploadRst.data
+                    values.otp = otp
+                    console.log(values)
 
-                if (registerRst.data.success && sendOtprst.data.success) {
-                    toast.success("OTP sent to registered email.")
-                    navigate("/sendMail", { state: data })
-                } else {
-                    toast.error(registerRst.data.message + ":" + sendOtprst.data.message)
+                    const data = { email: values.email, otp: otp }
+                    const sendOtprst = await sendMailToNewUser(data)
+                    const registerRst = await addUser(values)
+
+                    if (registerRst.data.success && sendOtprst.data.success) {
+                        toast.success("OTP sent to registered email.")
+                        navigate("/sendMail", { state: data })
+                    } else {
+                        toast.error(registerRst.data.message + ":" + sendOtprst.data.message)
+                    }
                 }
             }
-
         }
-    }
-    const handleChange = (e) => {
-        setInputs({ ...inputs, [e.target.name]: e.target.value })
-        // console.log(inputs)
-    }
+    })
+
 
     return (
         <div className='container bg-info my-1 col-lg-5' align="center">
@@ -53,27 +64,49 @@ const AddUser = () => {
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label className="form-label text-center">Name</label>
-                    <input type="text" value={inputs.name || ''} onChange={handleChange} name="name" className="form-control" id="name" />
+                    <input type="text" value={values.name} onChange={handleChange} onBlur={handleBlur} name="name" className="form-control" id="name" />
+                    {errors.name && touched.name ? (
+                        <span className='addUserFormErrorMsg'>{errors.name}</span>) : null
+                    }
                 </div>
                 <div className="mb-3">
                     <label className="form-label">User Name</label>
-                    <input type="text" value={inputs.username || ''} onChange={handleChange} className="form-control" name='username' id="username" />
+                    <input type="text" value={values.username} onChange={handleChange} onBlur={handleBlur} className="form-control" name='username' id="username" />
+                    {errors.username && touched.username ? (
+                        <span className='addUserFormErrorMsg'>{errors.username}</span>) : null
+                    }
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Email</label>
-                    <input type="text" value={inputs.email || ''} onChange={handleChange} className="form-control" name='email' id="email" />
+                    <input type="text" value={values.email} onChange={handleChange} onBlur={handleBlur} className="form-control" name='email' id="email" />
+                    {errors.email && touched.email ? (
+                        <span className='addUserFormErrorMsg'>{errors.email}</span>) : null
+                    }
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Password</label>
-                    <input type="password" value={inputs.password || ''} onChange={handleChange} className="form-control" name='password' id="password" />
+                    <input type="password" value={values.password} onChange={handleChange} onBlur={handleBlur} className="form-control" name='password' id="password" />
+                    {errors.password && touched.password ? (
+                        <span className='addUserFormErrorMsg'>{errors.password}</span>) : null
+                    }
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Confirm Password</label>
+                    <input type="password" value={values.cpassword} onChange={handleChange} onBlur={handleBlur} className="form-control" name='cpassword' id="cpassword" />
+                    {errors.cpassword && touched.cpassword ? (
+                        <span className='addUserFormErrorMsg'>{errors.cpassword}</span>) : null
+                    }
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Address</label>
-                    <input type="text" value={inputs.address || ''} onChange={handleChange} className="form-control" name='address' id="address" />
+                    <input type="text" value={values.address} onChange={handleChange} onBlur={handleBlur} className="form-control" name='address' id="address" />
+                    {errors.address && touched.address ? (
+                        <span className='addUserFormErrorMsg'>{errors.address}</span>) : null
+                    }
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Profile image</label>
-                    <input type="file" onChange={(e) => setProfile(e.target.files[0])} className="form-control" name='file' id="profile" />
+                    <input type="file" onChange={(e) => setProfile(e.target.files[0])} className="form-control" name='userProfile' id="profile" />
                 </div>
 
                 <input type="submit" className="btn btn-primary my-2" value={"Add user"} />

@@ -87,7 +87,7 @@ export const validateOTP = (req, res) => {
         otp: req.body.otp,
         email: req.body.email
     }
-    console.log(otp_detail)
+    // console.log(otp_detail)
     validateOTPModel(otp_detail, (err, data) => {
         if (err) return res.status(404).json({ "message": err })
         if (data[0].success) {

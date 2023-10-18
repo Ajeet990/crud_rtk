@@ -2,3 +2,7 @@ nav div a.active {
     color: red;
     font-weight: bold;
   }
+
+.addUserFormErrorMsg {
+  color: red;
+}
