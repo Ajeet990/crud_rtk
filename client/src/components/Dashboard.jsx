@@ -2,6 +2,10 @@ import React, {useEffect} from 'react'
 import {toast} from 'react-toastify'
 import { useGetAllUserListQuery, useDeleteUserMutation } from '../services/userApi'
 import { Link } from 'react-router-dom'
+import { FcInfo } from "react-icons/fc";
+import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineUserAdd } from "react-icons/ai";
 const Home = () => {
     const userResponse = useGetAllUserListQuery()
     const [deleteUser] = useDeleteUserMutation()
@@ -13,10 +17,12 @@ const Home = () => {
     // console.log("data is", userList)
     const handleDelete = async (userId) => {
         // console.log("delete", userId)
-        confirm("Are you sure want to delete?")
-        const deleteRst = await deleteUser(userId)
-        if (deleteRst.data.success) {
-            toast.success("User deleted successfully.")
+        const delete_confirmation = confirm("Are you sure want to delete?")
+        if (delete_confirmation) {
+            const deleteRst = await deleteUser(userId)
+            if (deleteRst.data.success) {
+                toast.success("User deleted successfully.")
+            }
         }
     }
     if (userResponse.isLoading) return <div>Please Wait Data Loading...</div>
@@ -24,7 +30,7 @@ const Home = () => {
     return (
         <div className='container'>
             <h1>Welcome to my Crud Application</h1>
-            <Link to="addUser" className='btn btn-primary'>Add User</Link>
+            <Link to="addUser" className='btn btn-primary'>Add User <AiOutlineUserAdd/></Link>
             {
                 userResponse.isSuccess && (
                     <table className="table">
@@ -49,9 +55,9 @@ const Home = () => {
                                             <td>{user.email}</td>
                                             <td>{user.address}</td>
                                             <td>
-                                                <Link to={`/update/${user.id}`} className='btn btn-sm btn-info'>Edit</Link>
-                                                <button onClick={() => handleDelete(user.id)} className='btn btn-sm btn-danger mx-1'>Delete</button>
-                                                <Link to={`/view/${user.id}`} className='btn btn-sm btn-info'>View</Link>
+                                                <Link to={`/update/${user.id}`} className='btn btn-sm btn-info'><AiOutlineEdit/></Link>
+                                                <button onClick={() => handleDelete(user.id)} className='btn btn-sm btn-danger mx-1'><AiOutlineDelete/></button>
+                                                <Link to={`/view/${user.id}`} className='btn btn-sm btn-info'> <FcInfo/></Link>
                                             </td>
                                         </tr>
                                     )

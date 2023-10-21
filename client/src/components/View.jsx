@@ -1,6 +1,8 @@
 import React from 'react'
 import { useFindUserByIdQuery } from '../services/userApi'
 import { Link, useParams } from 'react-router-dom'
+import { AiOutlineRollback } from "react-icons/ai";
+
 
 const View = () => {
     const { id } = useParams()
@@ -25,7 +27,7 @@ const View = () => {
                     <span><img src={imagePath} width='50%' alt="" /></span>
                 </div>
             </div>
-            <Link className='btn btn-sm btn-success' to={'/'}>Go Back</Link>
+            <Link className='btn btn-sm btn-success' to={'/'}>Go Back <AiOutlineRollback/></Link>
         </div>
     )
 }

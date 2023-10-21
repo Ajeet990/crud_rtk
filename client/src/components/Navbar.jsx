@@ -63,7 +63,7 @@ const Navbar = () => {
                                     <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         {auth.user.username}
                                     </button>
-                                    <ul className="dropdown-menu">
+                                    <ul className="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <NavLink className="dropdown-item" to={`view/${auth.user.userId}`}>Profile</NavLink>
                                         </li>
